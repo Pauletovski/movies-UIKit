@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 class HomeView: UIView {
     
@@ -27,7 +26,8 @@ class HomeView: UIView {
     }()
 
     func configureCollectionViewLayout() {
-        let cellWidth: CGFloat = 180
+        let cellFullWidth: CGFloat = (UIScreen.main.bounds.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - flowLayout.minimumInteritemSpacing - 20)
+        let cellWidth: CGFloat = cellFullWidth / 2
         let cellHeight: CGFloat = 300
         flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
     }
@@ -101,16 +101,19 @@ extension HomeView: ViewCoded {
             headerStackView.topAnchor.constraint(equalTo: topAnchor),
             headerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
             titleAppLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleAppLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleAppLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: -40),
+            
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             textField.heightAnchor.constraint(equalToConstant: 30),
+            
             collectionView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100)
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -90)
         ])
     }
     

@@ -6,13 +6,10 @@
 //
 
 import UIKit
-import SwiftUI
 import Nuke
-import Combine
 
 class MovieCard: UICollectionViewCell {
     static let identifier = "MovieCard"
-    let pipeline = ImagePipeline()
     
     //MARK: - Properties
     
@@ -25,9 +22,10 @@ class MovieCard: UICollectionViewCell {
         }
     }
     
+    let pipeline = ImagePipeline()
+    
     func configure(with movie: MovieViewData) {
         movieTitleLabel.text = movie.title
-        
         
         let url = URL(string: "https://image.tmdb.org/t/p/w500\(movie.image)")
         let request = ImageRequest(url: url)
@@ -109,13 +107,16 @@ class MovieCard: UICollectionViewCell {
             movieImage.trailingAnchor.constraint(equalTo: trailingAnchor),
             movieImage.topAnchor.constraint(equalTo: topAnchor),
             movieImage.bottomAnchor.constraint(equalTo: stackView.topAnchor),
+            
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
             stackView.heightAnchor.constraint(equalToConstant: 50),
+            
             movieTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
             movieTitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -4),
             movieTitleLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 4),
+            
             favoriteButton.widthAnchor.constraint(equalToConstant: 20),
             favoriteButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -8)
         ])

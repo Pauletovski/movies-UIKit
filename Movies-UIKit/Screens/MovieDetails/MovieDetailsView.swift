@@ -6,19 +6,16 @@
 //
 
 import UIKit
-import SwiftUI
 import Nuke
-import Combine
 
 class MovieDetailsView: UIView {
     
-    static let identifier = "MovieCard"
     let pipeline = ImagePipeline()
     
     //MARK: - Properties
     
     var onDismissTapped: (() -> Void)?
-        
+    
     func configure(with movie: MovieViewData) {
         movieTitleLabel.text = movie.title
         movieReleaseLabel.text = movie.releaseDate
@@ -34,6 +31,10 @@ class MovieDetailsView: UIView {
                 print("Error loading image: \(error)")
             }
         }
+        
+        // Adjust content hugging priority
+        movieDescriptionLabel.setContentHuggingPriority(.required, for: .vertical)
+        movieReleaseLabel.setContentHuggingPriority(.required, for: .vertical)
     }
     
     lazy var movieTitleLabel: UILabel = {
@@ -53,7 +54,15 @@ class MovieDetailsView: UIView {
         label.textColor = .black
         label.numberOfLines = 0
         label.textAlignment = .justified
+        label.clipsToBounds = true
         return label
+    }()
+    
+    lazy var scrollView: UIScrollView = {
+        let scroll = UIScrollView(frame: .zero)
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        scroll.showsVerticalScrollIndicator = false
+        return scroll
     }()
     
     lazy var movieReleaseLabel: UILabel = {
@@ -68,10 +77,10 @@ class MovieDetailsView: UIView {
     
     lazy var movieImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleToFill
+        imageView.backgroundColor = .red
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        
         return imageView
     }()
     
@@ -86,17 +95,14 @@ class MovieDetailsView: UIView {
         button.backgroundColor = .primaryGray
         button.layer.cornerRadius = 8
         button.contentEdgeInsets = UIEdgeInsets(
-          top: 10,
-          left: 20,
-          bottom: 10,
-          right: 20
+            top: 10,
+            left: 20,
+            bottom: 10,
+            right: 20
         )
         
         return button
     }()
-    
-
-
     
     //MARK: - Init
     
@@ -114,36 +120,51 @@ class MovieDetailsView: UIView {
         onDismissTapped?()
     }
 }
-
 //MARK: - ViewCode
 extension MovieDetailsView: ViewCoded {
     func buildViewHierarchy() {
-      addSubview(movieImage)
-      addSubview(movieTitleLabel)
-      addSubview(movieDescriptionLabel)
-      addSubview(movieReleaseLabel)
-      addSubview(dismissButton)
+        addSubview(movieImage)
+        addSubview(movieTitleLabel)
+        scrollView.addSubview(movieDescriptionLabel)
+        addSubview(scrollView)
+        addSubview(movieReleaseLabel)
+        addSubview(dismissButton)
     }
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            movieImage.topAnchor.constraint(equalTo: topAnchor),
+            movieImage.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             movieImage.leadingAnchor.constraint(equalTo: leadingAnchor),
             movieImage.trailingAnchor.constraint(equalTo: trailingAnchor),
-            movieImage.heightAnchor.constraint(equalToConstant: 400),
-            movieTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            movieTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            movieImage.heightAnchor.constraint(equalToConstant: 500),
+            
             movieTitleLabel.topAnchor.constraint(equalTo: movieImage.bottomAnchor, constant: 16),
-            movieDescriptionLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            movieDescriptionLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            movieDescriptionLabel.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor, constant: 16),
-            movieReleaseLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            movieTitleLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            movieTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
+            scrollView.topAnchor.constraint(equalTo: movieTitleLabel.bottomAnchor, constant: 16),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            scrollView.bottomAnchor.constraint(equalTo: movieReleaseLabel.topAnchor, constant: -16),
+            
+            movieDescriptionLabel.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            movieDescriptionLabel.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            movieDescriptionLabel.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            movieDescriptionLabel.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            movieDescriptionLabel.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
             movieReleaseLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            movieReleaseLabel.topAnchor.constraint(equalTo: movieDescriptionLabel.bottomAnchor, constant: 16),
-            dismissButton.topAnchor.constraint(equalTo: movieReleaseLabel.bottomAnchor, constant: 16),
+            movieReleaseLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            movieReleaseLabel.bottomAnchor.constraint(equalTo: dismissButton.topAnchor, constant: -16),
+            
+            dismissButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
             dismissButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
+
+        scrollView.contentSize = CGSize(width: UIScreen.main.bounds.width - 16, height: 2000)
     }
+
+
     
     func addAdditionalConfiguration() {
         backgroundColor = .primaryYellow

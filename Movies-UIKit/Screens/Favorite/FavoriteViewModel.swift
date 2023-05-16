@@ -6,48 +6,105 @@
 //
 
 import Foundation
-import Combine
 
-class FavoriteViewModel {
-    let networkProvider: Networkable
-    var homeViewModel: HomeViewModel
-    var moviesFavorite: [MovieViewData] = []
-    var filteredMovies: [MovieViewData] = []
-    var searchText: String = ""
+protocol FavoriteViewModelDelegate: AnyObject {
+    func reloadData()
+    func didSelectedGenre(_ genre: Genre)
+}
+
+protocol FavoriteViewModelType: AnyObject {
+    var networkProvider: Networkable { get set }
+    var delegate: FavoriteViewModelDelegate? { get set }
+    var moviesResult: [MovieViewData] { get set }
     
-    let reloadData = PassthroughSubject<Void, Never>()
-    let onFavoriteChanged = PassthroughSubject<Int, Never>()
+    func getFavoriteMovies(page: Int)
+    func handleFavoriteTapped(with id: Int)
+    func checkFavorite()
+    func searchFilter(using searchText: String)
+    func genreFilter()
+    func removeGenreFilter()
     
-    var cancelSet = Set<AnyCancellable>()
+    func presentMovieDetails(movie: MovieViewData)
+    func presentAddFilter()
+}
+
+final class FavoriteViewModel: NSObject, FavoriteViewModelType {
+    weak var coordinator: AppCoordinating?
+    weak var delegate: FavoriteViewModelDelegate?
     
-    init(networkProvider: Networkable, homeViewModel: HomeViewModel) {
+    private var allFavoritedMovies: [MovieViewData] = []
+    
+    var networkProvider: Networkable
+    var moviesResult: [MovieViewData] = []
+    
+    init(networkProvider: Networkable){
         self.networkProvider = networkProvider
-        self.homeViewModel = homeViewModel
+        super.init()
+    }
+    
+    func getFavoriteMovies(page: Int) {
+        Task { @MainActor in
+            let result = await self.networkProvider.getMovies(page: page)
+            switch result {
+            case .success(let movies):
+                self.moviesResult = movies.results.map { MovieViewData(movie: $0) }
+                self.checkFavorite()
+                self.genreFilter()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func presentMovieDetails(movie: MovieViewData) {
+        self.coordinator?.presentMovieDetails(movie: movie)
+    }
+    
+    func presentAddFilter() {
+        self.coordinator?.presentAddFilter() { [weak self] in
+            self?.genreFilter()
+        }
+    }
+ 
+    func handleFavoriteTapped(with id: Int) {
+        let index = moviesResult.firstIndex(where: { $0.id == id })
         
-        onFavoriteChanged
-            .sink { [weak self] movieID in
-                guard let self else { return }
-
-                if let movieFavoriteIndex = self.moviesFavorite.firstIndex(where: { $0.id == movieID }) {
-                    self.moviesFavorite.remove(at: movieFavoriteIndex)
-                }
-                
-                if let movieFilteredIndex = self.filteredMovies.firstIndex(where: { $0.id == movieID }) {
-                    self.filteredMovies.remove(at: movieFilteredIndex)
-                }
-                
-                self.homeViewModel.onFavoriteChanged.send(movieID)
-                self.homeViewModel.favoritedMovies.send(self.moviesFavorite)
-                self.reloadData.send()
-            }.store(in: &cancelSet)
+        if let index { moviesResult[index].isFavorite = false }
         
-        homeViewModel.favoritedMovies
-            .sink { [weak self] favoriteMovies in
-                guard let self else { return }
-                
-                self.moviesFavorite = []
-                self.moviesFavorite = favoriteMovies
-                self.reloadData.send()
-            }.store(in: &cancelSet)
+        self.checkFavorite()
+    }
+    
+    func checkFavorite() {
+        for (i, movie) in moviesResult.enumerated() {
+            if MovieDB.shared.favoritedIds.contains(movie.id) {
+                moviesResult[i].isFavorite = true
+            } else {
+                moviesResult[i].isFavorite = false
+            }
+        }
+        
+        self.moviesResult = self.moviesResult.filter({ $0.isFavorite ?? true })
+        self.allFavoritedMovies = self.moviesResult
+        self.delegate?.reloadData()
+    }
+    
+    func searchFilter(using searchText: String) {
+        self.moviesResult = allFavoritedMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        self.delegate?.reloadData()
+    }
+    
+    func genreFilter() {
+        guard let genre = MovieDB.shared.genreSelected else { return }
+        
+        self.moviesResult = allFavoritedMovies.filter { $0.genreId.contains(genre.id) }
+        self.delegate?.didSelectedGenre(genre)
+        self.delegate?.reloadData()
+    }
+    
+    func removeGenreFilter() {
+        guard MovieDB.shared.genreSelected != nil else { return }
+        
+        MovieDB.shared.genreSelected = nil
+        getFavoriteMovies(page: 1)
     }
 }

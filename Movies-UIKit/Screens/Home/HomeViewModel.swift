@@ -6,89 +6,86 @@
 //
 
 import Foundation
-import Combine
 
-class HomeViewModel {
-    let networkProvider: Networkable
-    let coordinator: MoviesCoordinator
+protocol HomeViewModelDelegate: AnyObject {
+    func reloadData()
+}
+
+protocol HomeViewModelType: AnyObject {
+    var networkProvider: Networkable { get set }
+    var delegate: HomeViewModelDelegate? { get set }
+    var coordinator: AppCoordinating? { get set }
+    var moviesResult: [MovieViewData] { get set }
     
+    func getMovies(page: Int)
+    func handleFavoriteTapped(with id: Int)
+    func checkFavorite()
+    func searchFilter(using searchText: String)
+    
+    func presentMovieDetails(movie: MovieViewData)
+}
+
+final class HomeViewModel: NSObject, HomeViewModelType {
+    weak var coordinator: AppCoordinating?
+    weak var delegate: HomeViewModelDelegate?
+    
+    private var allMovies: [MovieViewData] = []
+    
+    var networkProvider: Networkable
     var moviesResult: [MovieViewData] = []
-    var moviesFavorite: [MovieViewData] = []
-    var filteredMovies: [MovieViewData] = []
-    var searchText: String = ""
     
-    let reloadData = PassthroughSubject<Void, Never>()
-    let onFavoriteChanged = PassthroughSubject<Int, Never>()
-    let favoritedMovies = PassthroughSubject<[MovieViewData], Never>()
-    let onPresentMovieDetails = PassthroughSubject<MovieViewData, Never>()
-    
-    var cancelSet = Set<AnyCancellable>()
-    
-    init(networkProvider: Networkable, coordinator: MoviesCoordinator) {
+    init(networkProvider: Networkable) {
         self.networkProvider = networkProvider
-        self.coordinator = coordinator
-        
-        self.getNewMovies(page: 1)
-        
-        onPresentMovieDetails
-            .sink { [weak self] movie in
-                guard let self else { return }
-                
-                self.coordinator.presentMovieDetails(movie: movie)
-            }.store(in: &cancelSet)
-        
-        onFavoriteChanged
-            .sink { [weak self] movieId in
-                guard let self else { return }
-                
-                if let movieFavoriteIndex = self.moviesFavorite.firstIndex(where: { $0.id == movieId }) {
-                    if self.moviesFavorite[movieFavoriteIndex].isFavorite {
-                        self.moviesFavorite.remove(at: movieFavoriteIndex)
-                    }
-                }
-                
-                if let moviesResultIndex = self.moviesResult.firstIndex(where: { $0.id == movieId }) {
-                    if self.moviesResult[moviesResultIndex].isFavorite {
-                        self.moviesResult[moviesResultIndex].isFavorite = false
-                    } else {
-                        self.moviesResult[moviesResultIndex].isFavorite = true
-                        self.moviesFavorite.append(self.moviesResult[moviesResultIndex])
-                    }
-                }
-                
-                if let moviesFilteredIndex = self.filteredMovies.firstIndex(where: { $0.id == movieId }) {
-                    if self.filteredMovies[moviesFilteredIndex].isFavorite {
-                        self.filteredMovies[moviesFilteredIndex].isFavorite = false
-                    } else {
-                        self.filteredMovies[moviesFilteredIndex].isFavorite = true
-                        self.moviesFavorite.append(self.moviesResult[moviesFilteredIndex])
-                    }
-                }
-                
-                
-                self.favoritedMovies.send(self.moviesFavorite)
-                self.reloadData.send()
-            }.store(in: &cancelSet)
-        
-        favoritedMovies
-            .sink { [weak self] favoriteMovies in
-                guard let self else { return }
-                
-                self.moviesFavorite = []
-                self.moviesFavorite = favoriteMovies
-                self.reloadData.send()
-            }.store(in: &cancelSet)
     }
     
-    func getNewMovies(page: Int) {
-        self.networkProvider.getNewMovies(page: page) { movies in
-            self.moviesResult = movies.map({ MovieViewData(title: $0.title,
-                                                           image: $0.poster_path,
-                                                           description: $0.overview,
-                                                           releaseDate: $0.release_date,
-                                                           id: $0.id,
-                                                           isFavorite: false) })
-            self.reloadData.send()
+    func getMovies(page: Int) {
+        Task { @MainActor in
+            let result = await self.networkProvider.getMovies(page: page)
+            switch result {
+            case .success(let movies):
+                self.moviesResult = movies.results.map { MovieViewData(movie: $0) }
+                self.checkFavorite()
+            case .failure(let error):
+                print(error)
+            }
         }
+    }
+    
+    func presentMovieDetails(movie: MovieViewData) {
+        self.coordinator?.presentMovieDetails(movie: movie)
+    }
+    
+    func handleFavoriteTapped(with id: Int) {
+        let index = moviesResult.firstIndex(where: { $0.id == id })
+        
+        if let index { moviesResult[index].isFavorite = false }
+        
+        self.checkFavorite()
+    }
+    
+    func checkFavorite() {
+        resetFavorite()
+        
+        for (i, movie) in moviesResult.enumerated() {
+            if let index = MovieDB.shared.favoritedIds.firstIndex(of: movie.id) {
+                moviesResult[i].isFavorite = true
+            } else {
+                moviesResult[i].isFavorite = false
+            }
+        }
+        
+        self.allMovies = self.moviesResult
+        self.delegate?.reloadData()
+    }
+    
+    private func resetFavorite() {
+        for i in 0..<moviesResult.count {
+            moviesResult[i].isFavorite = false
+        }
+    }
+    
+    func searchFilter(using searchText: String) {
+        self.moviesResult = allMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        self.delegate?.reloadData()
     }
 }
