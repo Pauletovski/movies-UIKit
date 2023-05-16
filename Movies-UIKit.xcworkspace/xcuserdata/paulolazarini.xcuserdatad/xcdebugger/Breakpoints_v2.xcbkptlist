@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "9DBD7C49-B45A-4581-BCC7-FD29A90F8790"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2D6F9D90-425A-4FF5-8668-94EC0CE91765"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Movies-UIKit/Screens/Home/HomeViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "init(networkProvider:coordinator:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "317FC5EB-4429-420A-8140-4C7BFFFECF78"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Movies-UIKit/Screens/Home/HomeViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "init(networkProvider:coordinator:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "317FC5EB-4429-420A-8140-4C7BFFFECF78 - c38c753df6917837"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Movies_UIKit.HomeViewModel.init(networkProvider: Movies_UIKit.Networkable, coordinator: Movies_UIKit.MoviesCoordinator) -&gt; Movies_UIKit.HomeViewModel"
+                  moduleName = "Movies-UIKit"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Home/HomeViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "728">
+               </Location>
+               <Location
+                  uuid = "317FC5EB-4429-420A-8140-4C7BFFFECF78 - 40f1091375053a54"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (Swift.Int) -&gt; () in Movies_UIKit.HomeViewModel.init(networkProvider: Movies_UIKit.Networkable, coordinator: Movies_UIKit.MoviesCoordinator) -&gt; Movies_UIKit.HomeViewModel"
+                  moduleName = "Movies-UIKit"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Home/HomeViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "84">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1ED1D832-77C8-42A1-88DE-01AABBB37414"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Movies-UIKit/Screens/Favorite/FavoriteViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "init(networkProvider:homeViewModel:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1ED1D832-77C8-42A1-88DE-01AABBB37414 - b2a5313c9a743e44"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Movies_UIKit.FavoriteViewModel.init(networkProvider: Movies_UIKit.Networkable, homeViewModel: Movies_UIKit.HomeViewModel) -&gt; Movies_UIKit.FavoriteViewModel"
+                  moduleName = "Movies-UIKit"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Favorite/FavoriteViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "408">
+               </Location>
+               <Location
+                  uuid = "1ED1D832-77C8-42A1-88DE-01AABBB37414 - a06e03579a9a1ee5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Int) -&gt; () in Movies_UIKit.FavoriteViewModel.init(networkProvider: Movies_UIKit.Networkable, homeViewModel: Movies_UIKit.HomeViewModel) -&gt; Movies_UIKit.FavoriteViewModel"
+                  moduleName = "Movies-UIKit"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Favorite/FavoriteViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "68">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

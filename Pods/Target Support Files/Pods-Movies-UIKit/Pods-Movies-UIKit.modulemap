@@ -1,0 +1,6 @@
+framework module Pods_Movies_UIKit {
+  umbrella header "Pods-Movies-UIKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
