@@ -51,7 +51,9 @@ public class FavoriteViewController: UIViewController {
     
     //MARK: - Methods
     private func setupBindings() {
-        
+        contentView.onAddFilterTapped = {
+            self.viewModel.coordinator.presentAddFilter()
+        }
     }
     
     private func setup() {

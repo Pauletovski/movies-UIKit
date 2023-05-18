@@ -11,6 +11,8 @@ import Combine
 class FavoriteViewModel {
     let networkProvider: Networkable
     var homeViewModel: HomeViewModel
+    var coordinator: FavoriteMoviesCoordinator
+    
     var moviesFavorite: [MovieViewData] = []
     var filteredMovies: [MovieViewData] = []
     var searchText: String = ""
@@ -20,9 +22,10 @@ class FavoriteViewModel {
     
     var cancelSet = Set<AnyCancellable>()
     
-    init(networkProvider: Networkable, homeViewModel: HomeViewModel) {
+    init(networkProvider: Networkable, homeViewModel: HomeViewModel, coordinator: FavoriteMoviesCoordinator){
         self.networkProvider = networkProvider
         self.homeViewModel = homeViewModel
+        self.coordinator = coordinator
         
         onFavoriteChanged
             .sink { [weak self] movieID in

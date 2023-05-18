@@ -12,7 +12,6 @@ import Combine
 
 class MovieCard: UICollectionViewCell {
     static let identifier = "MovieCard"
-    let pipeline = ImagePipeline()
     
     //MARK: - Properties
     
@@ -24,6 +23,8 @@ class MovieCard: UICollectionViewCell {
             favoriteButton.setImage(image, for: .normal)
         }
     }
+    
+    let pipeline = ImagePipeline()
     
     func configure(with movie: MovieViewData) {
         movieTitleLabel.text = movie.title

@@ -15,7 +15,11 @@ protocol MoviesCoordinator {
     func start() -> Void
 }
 
-class Coordinator: MoviesCoordinator {
+protocol FavoriteMoviesCoordinator {
+    func presentAddFilter() -> Void
+}
+
+class Coordinator: MoviesCoordinator, FavoriteMoviesCoordinator {
     var navigationController: UINavigationController
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -29,7 +33,7 @@ class Coordinator: MoviesCoordinator {
     lazy var homeViewModel = HomeViewModel(networkProvider: service, coordinator: self)
     lazy var homeViewController = HomeViewController(viewModel: homeViewModel)
 
-    lazy var favoriteViewModel = FavoriteViewModel(networkProvider: service, homeViewModel: homeViewModel)
+    lazy var favoriteViewModel = FavoriteViewModel(networkProvider: service, homeViewModel: homeViewModel, coordinator: self)
     lazy var favoriteViewController = FavoriteViewController(viewModel: favoriteViewModel)
     
     func start() {
@@ -51,6 +55,13 @@ class Coordinator: MoviesCoordinator {
             self.navigationController.dismiss(animated: true)
         }
     
+        navigationController.present(viewController, animated: true)
+    }
+    
+    func presentAddFilter() {
+        let viewController = UIViewController()
+        viewController.view.backgroundColor = .red
+        
         navigationController.present(viewController, animated: true)
     }
 }

@@ -68,53 +68,5 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1ED1D832-77C8-42A1-88DE-01AABBB37414"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Movies-UIKit/Screens/Favorite/FavoriteViewModel.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "init(networkProvider:homeViewModel:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1ED1D832-77C8-42A1-88DE-01AABBB37414 - b2a5313c9a743e44"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Movies_UIKit.FavoriteViewModel.init(networkProvider: Movies_UIKit.Networkable, homeViewModel: Movies_UIKit.HomeViewModel) -&gt; Movies_UIKit.FavoriteViewModel"
-                  moduleName = "Movies-UIKit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Favorite/FavoriteViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "408">
-               </Location>
-               <Location
-                  uuid = "1ED1D832-77C8-42A1-88DE-01AABBB37414 - a06e03579a9a1ee5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Int) -&gt; () in Movies_UIKit.FavoriteViewModel.init(networkProvider: Movies_UIKit.Networkable, homeViewModel: Movies_UIKit.HomeViewModel) -&gt; Movies_UIKit.FavoriteViewModel"
-                  moduleName = "Movies-UIKit"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Favorite/FavoriteViewModel.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "28"
-                  endingLineNumber = "28"
-                  offsetFromSymbolStart = "68">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
