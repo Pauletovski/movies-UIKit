@@ -15,6 +15,8 @@ class FavoriteView: UIView {
     var onAddFilterTapped: (() -> Void)?
     var onRemoveFilterTapped: (() -> Void)?
     
+    private var collectionViewTopConstraint: NSLayoutConstraint?
+    
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -102,6 +104,7 @@ class FavoriteView: UIView {
         super.init(frame: .zero)
         setupView()
         configureCollectionViewLayout()
+        updateCollectionViewTopConstraint()
     }
     
     required init?(coder: NSCoder) {
@@ -115,6 +118,14 @@ class FavoriteView: UIView {
     
     @objc func removeFilter() {
         self.onRemoveFilterTapped?()
+    }
+    
+    func updateCollectionViewTopConstraint() {
+        collectionViewTopConstraint?.constant = 10
+    }
+    
+    func updateCollectionViewTopConstraintForFiltersOn() {
+        collectionViewTopConstraint?.constant = 60
     }
 }
 
@@ -131,6 +142,9 @@ extension FavoriteView: ViewCoded {
     }
     
     func setupConstraints() {
+        collectionViewTopConstraint = collectionView.topAnchor.constraint(equalTo: filterButton.bottomAnchor, constant: 10)
+        collectionViewTopConstraint?.isActive = true
+        
         NSLayoutConstraint.activate([
             headerStackView.topAnchor.constraint(equalTo: topAnchor),
             headerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -147,7 +161,6 @@ extension FavoriteView: ViewCoded {
             removeFilterButton.topAnchor.constraint(equalTo: filterButton.bottomAnchor),
             removeFilterButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             removeFilterButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: removeFilterButton.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100)

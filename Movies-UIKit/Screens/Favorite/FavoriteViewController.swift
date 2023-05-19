@@ -53,6 +53,7 @@ public class FavoriteViewController: UIViewController {
             .sink { [weak self] _ in
                 guard let self else { return }
                 self.contentView.removeFilterButton.isHidden = false
+                self.contentView.updateCollectionViewTopConstraintForFiltersOn()
             }.store(in: &viewModel.cancelSet)
 
     }
@@ -65,6 +66,7 @@ public class FavoriteViewController: UIViewController {
         
         contentView.onRemoveFilterTapped = {
             self.contentView.removeFilterButton.isHidden = true
+            self.contentView.updateCollectionViewTopConstraint()
             self.viewModel.onFiltersRemoved.send()
         }
     }
