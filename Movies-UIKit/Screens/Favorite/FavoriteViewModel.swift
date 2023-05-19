@@ -15,10 +15,13 @@ class FavoriteViewModel {
     
     var moviesFavorite: [MovieViewData] = []
     var filteredMovies: [MovieViewData] = []
+    var genreFilteredMovies: [MovieViewData] = []
     var searchText: String = ""
     
     let reloadData = PassthroughSubject<Void, Never>()
     let onFavoriteChanged = PassthroughSubject<Int, Never>()
+    let onGenreFilterSelected = PassthroughSubject<Genre, Never>()
+    let onFiltersRemoved = PassthroughSubject<Void, Never>()
     
     var cancelSet = Set<AnyCancellable>()
     
@@ -26,6 +29,36 @@ class FavoriteViewModel {
         self.networkProvider = networkProvider
         self.homeViewModel = homeViewModel
         self.coordinator = coordinator
+        
+        onFiltersRemoved
+            .sink { [weak self] _ in
+                guard let self else { return }
+                
+                self.filteredMovies = []
+                self.genreFilteredMovies = []
+                
+                
+                self.reloadData.send()
+            }.store(in: &cancelSet)
+        
+        onGenreFilterSelected
+            .sink { [weak self] genre in
+                guard let self else { return }
+                
+                self.filteredMovies = []
+                
+                self.moviesFavorite.map { movie in
+                    movie.genreId.map { genreId in
+                        if genreId == genre.id {
+                            self.genreFilteredMovies = []
+                            self.genreFilteredMovies.append(movie)
+                        }
+                    }
+                }
+                
+                self.filteredMovies = self.genreFilteredMovies
+                self.reloadData.send()
+            }.store(in: &cancelSet)
         
         onFavoriteChanged
             .sink { [weak self] movieID in

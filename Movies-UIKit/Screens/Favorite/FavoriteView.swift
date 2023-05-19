@@ -13,6 +13,7 @@ class FavoriteView: UIView {
     //MARK: - Properties
     
     var onAddFilterTapped: (() -> Void)?
+    var onRemoveFilterTapped: (() -> Void)?
     
     lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
@@ -42,6 +43,19 @@ class FavoriteView: UIView {
         button.titleLabel?.font = .systemFont(ofSize: 30, weight: .bold)
         button.addTarget(self, action: #selector(addFilter), for: .touchUpInside)
         button.backgroundColor = .primaryGray
+        button.tintColor = .white
+        
+        return button
+    }()
+    
+    lazy var removeFilterButton: UIButton = {
+        let button = UIButton(type: .system)
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Remove Filter", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 30, weight: .bold)
+        button.addTarget(self, action: #selector(removeFilter), for: .touchUpInside)
+        button.backgroundColor = .systemRed
         button.tintColor = .white
         
         return button
@@ -98,6 +112,10 @@ class FavoriteView: UIView {
     @objc func addFilter() {
         self.onAddFilterTapped?()
     }
+    
+    @objc func removeFilter() {
+        self.onRemoveFilterTapped?()
+    }
 }
 
 //MARK: - ViewCode
@@ -108,6 +126,7 @@ extension FavoriteView: ViewCoded {
         headerStackView.addArrangedSubview(textField)
         
         addSubview(filterButton)
+        addSubview(removeFilterButton)
         addSubview(collectionView)
     }
     
@@ -125,14 +144,18 @@ extension FavoriteView: ViewCoded {
             filterButton.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             filterButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             filterButton.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.topAnchor.constraint(equalTo: filterButton.bottomAnchor, constant: 10),
+            removeFilterButton.topAnchor.constraint(equalTo: filterButton.bottomAnchor),
+            removeFilterButton.trailingAnchor.constraint(equalTo: trailingAnchor),
+            removeFilterButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.topAnchor.constraint(equalTo: removeFilterButton.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100)
         ])
     }
-    
+
     func addAdditionalConfiguration() {
         backgroundColor = .white
+        removeFilterButton.isHidden = true
     }
 }

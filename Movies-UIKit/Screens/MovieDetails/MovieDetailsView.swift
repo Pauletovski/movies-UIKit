@@ -12,7 +12,6 @@ import Combine
 
 class MovieDetailsView: UIView {
     
-    static let identifier = "MovieCard"
     let pipeline = ImagePipeline()
     
     //MARK: - Properties

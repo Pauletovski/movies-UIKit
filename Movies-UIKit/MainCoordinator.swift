@@ -59,8 +59,12 @@ class Coordinator: MoviesCoordinator, FavoriteMoviesCoordinator {
     }
     
     func presentAddFilter() {
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .red
+        let viewModel = AddFiltersViewModel(networkProvider: service, favoriteViewModel: favoriteViewModel)
+        let viewController = AddFilterViewController(viewModel: viewModel)
+        
+        viewController.contentView.onDismissTapped = {
+            self.navigationController.dismiss(animated: true)
+        }
         
         navigationController.present(viewController, animated: true)
     }

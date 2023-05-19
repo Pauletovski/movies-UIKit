@@ -13,5 +13,6 @@ struct MovieViewData: Hashable {
     let description: String
     let releaseDate: String
     let id: Int
+    let genreId: [Int]
     var isFavorite: Bool
 }

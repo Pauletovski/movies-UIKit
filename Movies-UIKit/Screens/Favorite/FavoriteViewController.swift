@@ -47,12 +47,25 @@ public class FavoriteViewController: UIViewController {
                 guard let self else { return }
                 self.contentView.collectionView.reloadData()
             }.store(in: &viewModel.cancelSet)
+        
+        viewModel.onGenreFilterSelected
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.contentView.removeFilterButton.isHidden = false
+            }.store(in: &viewModel.cancelSet)
+
     }
     
     //MARK: - Methods
     private func setupBindings() {
         contentView.onAddFilterTapped = {
             self.viewModel.coordinator.presentAddFilter()
+        }
+        
+        contentView.onRemoveFilterTapped = {
+            self.contentView.removeFilterButton.isHidden = true
+            self.viewModel.onFiltersRemoved.send()
         }
     }
     

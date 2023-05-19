@@ -87,6 +87,7 @@ class HomeViewModel {
                                                            description: $0.overview,
                                                            releaseDate: $0.release_date,
                                                            id: $0.id,
+                                                           genreId: $0.genre_ids,
                                                            isFavorite: false) })
             self.reloadData.send()
         }
