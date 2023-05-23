@@ -8,6 +8,8 @@
 import UIKit
 
 class CustomTableViewCell: UITableViewCell {
+    static let identifier = "Cell"
+    
     lazy var filterName: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -57,7 +57,7 @@ public class AddFilterViewController: UIViewController {
     }
     
     func setupTableView(){
-        contentView.genreList.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
+        contentView.genreList.register(CustomTableViewCell.self, forCellReuseIdentifier: CustomTableViewCell.identifier)
         contentView.genreList.delegate = self
         contentView.genreList.dataSource = self
     }
@@ -70,7 +70,7 @@ extension AddFilterViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CustomTableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: CustomTableViewCell.identifier, for: indexPath) as? CustomTableViewCell {
             cell.setupCell(text: viewModel.genresList[indexPath.row].name)
             
             return cell
@@ -80,6 +80,10 @@ extension AddFilterViewController: UITableViewDelegate, UITableViewDataSource {
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         viewModel.favoriteViewModel.onGenreFilterSelected.send(viewModel.genresList[indexPath.row])
+        contentView.onDismissTapped = {
+            self.dismiss(animated: true)
+        }
+        contentView.dismissScreen()
     }
     
 }

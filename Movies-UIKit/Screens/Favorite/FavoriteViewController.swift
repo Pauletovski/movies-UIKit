@@ -50,9 +50,11 @@ public class FavoriteViewController: UIViewController {
         
         viewModel.onGenreFilterSelected
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+            .sink { [weak self] genre in
                 guard let self else { return }
                 self.contentView.removeFilterButton.isHidden = false
+                self.contentView.filterLabel.isHidden = false
+                self.contentView.configureFilterLabel(text: genre.name)
                 self.contentView.updateCollectionViewTopConstraintForFiltersOn()
             }.store(in: &viewModel.cancelSet)
 
@@ -66,6 +68,7 @@ public class FavoriteViewController: UIViewController {
         
         contentView.onRemoveFilterTapped = {
             self.contentView.removeFilterButton.isHidden = true
+            self.contentView.filterLabel.isHidden = true
             self.contentView.updateCollectionViewTopConstraint()
             self.viewModel.onFiltersRemoved.send()
         }

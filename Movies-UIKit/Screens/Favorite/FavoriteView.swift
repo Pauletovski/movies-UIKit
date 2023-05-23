@@ -86,6 +86,16 @@ class FavoriteView: UIView {
         return label
     }()
     
+    lazy var filterLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .primaryYellow
+        
+        return label
+    }()
+    
     lazy var textField: UITextField = {
        let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -125,7 +135,11 @@ class FavoriteView: UIView {
     }
     
     func updateCollectionViewTopConstraintForFiltersOn() {
-        collectionViewTopConstraint?.constant = 60
+        collectionViewTopConstraint?.constant = 80
+    }
+    
+    func configureFilterLabel(text: String) {
+        filterLabel.text = text
     }
 }
 
@@ -136,6 +150,7 @@ extension FavoriteView: ViewCoded {
         headerStackView.addArrangedSubview(titleAppLabel)
         headerStackView.addArrangedSubview(textField)
         
+        addSubview(filterLabel)
         addSubview(filterButton)
         addSubview(removeFilterButton)
         addSubview(collectionView)
@@ -161,6 +176,9 @@ extension FavoriteView: ViewCoded {
             removeFilterButton.topAnchor.constraint(equalTo: filterButton.bottomAnchor),
             removeFilterButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             removeFilterButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            filterLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            filterLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
+            filterLabel.topAnchor.constraint(equalTo: removeFilterButton.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100)
@@ -170,5 +188,6 @@ extension FavoriteView: ViewCoded {
     func addAdditionalConfiguration() {
         backgroundColor = .white
         removeFilterButton.isHidden = true
+        filterLabel.isHidden = true
     }
 }
