@@ -12,9 +12,9 @@ protocol MovieDetailsViewModelDelegate: AnyObject {
 }
 
 class MovieDetailsViewModel: NSObject {
-    var networkProvider: Networkable
     weak var delegate: MovieDetailsViewModelDelegate?
     
+    var networkProvider: Networkable
     var movie: MovieViewData
     
     init(networkProvider: Networkable,
@@ -22,20 +22,20 @@ class MovieDetailsViewModel: NSObject {
         self.networkProvider = networkProvider
         self.movie = movie
         super.init()
+        
         self.getMovieDetails()
     }
 
     private func getMovieDetails() {
-        self.delegate?.didReceiveMovieDetails(movie: self.movie)
+        Task { @MainActor in
+            let result = await self.networkProvider.getMovieDetails(id: self.movie.id)
+            switch result {
+            case .success(let movie):
+                self.delegate?.didReceiveMovieDetails(movie: MovieViewData(movieDetails: movie))
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 
-//        Task { @MainActor in
-//            let result = await self.networkProvider.getMovieDetails(id: self.movieId)
-//            switch result {
-//            case .success(let movie):
-//                self.delegate?.didReceiveMovieDetails(movie: MovieViewData(movie: movie))
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }

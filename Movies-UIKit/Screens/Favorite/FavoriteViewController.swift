@@ -22,6 +22,7 @@ public class FavoriteViewController: UIViewController {
     init(viewModel: FavoriteViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -40,6 +41,11 @@ public class FavoriteViewController: UIViewController {
         configKeyboard()
         
         setupTextField()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.getMovies(page: 1)
     }
     
     //MARK: - Methods
@@ -79,20 +85,29 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.filteredMovies.isEmpty ? viewModel.moviesFavorite.count : viewModel.filteredMovies.count
+        return viewModel.moviesResult.count
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = contentView.collectionView.dequeueReusableCell(withReuseIdentifier: MovieCard.identifier, for: indexPath) as! MovieCard
         
-        let movie = viewModel.filteredMovies.isEmpty ? viewModel.moviesFavorite[indexPath.row] : viewModel.filteredMovies[indexPath.row]
+        let movie = viewModel.moviesResult[indexPath.row]
         cell.configure(with: movie)
         
-        cell.isFavorite = movie.isFavorite
-        
+        cell.isFavorite = movie.isFavorite ?? false
+         
         cell.onFavoriteButtonTapped = { [weak self] in
             guard let self else { return }
             
+            cell.isFavorite.toggle()
+            
+            if let index = MovieDB.shared.favoritedIds.firstIndex(where: { $0 == movie.id }) {
+                MovieDB.shared.favoritedIds.remove(at: index)
+            } else {
+                MovieDB.shared.favoritedIds.append(movie.id)
+            }
+            
+            viewModel.checkFavorite(with: movie.id)
         }
         
         return cell
@@ -100,6 +115,12 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(collectionView)
+    }
+}
+
+extension FavoriteViewController: FavoriteViewModelDelegate {
+    func didGetMovies() {
+        contentView.collectionView.reloadData()
     }
 }
 
@@ -111,9 +132,9 @@ extension FavoriteViewController: UITextFieldDelegate {
     
     public func textFieldDidChangeSelection(_ textField: UITextField) {
         if let searchText = textField.text, !searchText.isEmpty {
-            viewModel.filteredMovies = viewModel.moviesFavorite.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+//            viewModel.filteredMovies = viewModel.moviesFavorite.filter { $0.title.lowercased().contains(searchText.lowercased()) }
         } else {
-            viewModel.filteredMovies = []
+//            viewModel.filteredMovies = []
         }
         contentView.collectionView.reloadData()
     }

@@ -36,7 +36,6 @@ public class MovieDetailsViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         setupBindings()
-        contentView.configure(with: viewModel.movie)
     }
     
     private func setupBindings() { }
@@ -44,6 +43,8 @@ public class MovieDetailsViewController: UIViewController {
 
 extension MovieDetailsViewController: MovieDetailsViewModelDelegate {
     func didReceiveMovieDetails(movie: MovieViewData) {
-        contentView.configure(with: movie)
+        DispatchQueue.main.async {
+            self.contentView.configure(with: movie)
+        }
     }
 }

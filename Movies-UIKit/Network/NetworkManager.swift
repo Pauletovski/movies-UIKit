@@ -11,7 +11,7 @@ import Moya
 protocol Networkable {
     var networkRequest: MoyaProvider<NetworkRequest> { get }
     func getMovies(page: Int) async -> Result<Movies, CustomError>
-    func getMovieDetails(id: Int) async -> Result<Movie, CustomError>
+    func getMovieDetails(id: Int) async -> Result<MovieDetails, CustomError>
     func getGenreList() async -> Result<[Genre], CustomError>
 }
 
@@ -23,8 +23,8 @@ class NetworkManager: Networkable {
         await networkRequest.requestModel(.getMovies(page: 1), Movies.self)
     }
     
-    func getMovieDetails(id: Int) async -> Result<Movie, CustomError> {
-        await networkRequest.requestModel(.getDetails(id: id), Movie.self)
+    func getMovieDetails(id: Int) async -> Result<MovieDetails, CustomError> {
+        await networkRequest.requestModel(.getDetails(id: id), MovieDetails.self)
     }
     
     func getGenreList() async -> Result<[Genre], CustomError> {
@@ -58,6 +58,7 @@ extension MoyaProvider {
             let result = try JSONDecoder().decode(T.self, from: response.data)
             return .success(result)
         } catch {
+            print(error.localizedDescription)
             return .failure(CustomError.networkError)
         }
     }

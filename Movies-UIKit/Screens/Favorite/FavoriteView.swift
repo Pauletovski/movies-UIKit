@@ -164,21 +164,27 @@ extension FavoriteView: ViewCoded {
             headerStackView.topAnchor.constraint(equalTo: topAnchor),
             headerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
             titleAppLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleAppLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleAppLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: -40),
+            
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             textField.heightAnchor.constraint(equalToConstant: 30),
+            
             filterButton.topAnchor.constraint(equalTo: headerStackView.bottomAnchor),
             filterButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             filterButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            
             removeFilterButton.topAnchor.constraint(equalTo: filterButton.bottomAnchor),
             removeFilterButton.trailingAnchor.constraint(equalTo: trailingAnchor),
             removeFilterButton.leadingAnchor.constraint(equalTo: leadingAnchor),
+            
             filterLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             filterLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             filterLabel.topAnchor.constraint(equalTo: removeFilterButton.bottomAnchor),
+            
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100)

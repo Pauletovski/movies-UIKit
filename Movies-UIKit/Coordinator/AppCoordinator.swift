@@ -32,16 +32,16 @@ class AppCoordinator: AppCoordinating {
     func start() {
         tabBarController.viewControllers = TabBarPage.allCases.map { makeViewController(for: $0) }
         tabBarController.tabBar.backgroundColor = .primaryYellow
+        tabBarController.tabBar.tintColor = .primaryGray
         navigationController.setViewControllers([tabBarController], animated: false)
     }
     
     func presentMovieDetails(movie: MovieViewData) {
-        print(movie)
         let viewModel = MovieDetailsViewModel(networkProvider: networkManager,
                                               movie: movie)
         let viewController = MovieDetailsViewController(viewModel: viewModel)
         
-        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalPresentationStyle = .pageSheet
         
         viewController.contentView.onDismissTapped = {
             self.navigationController.dismiss(animated: true)

@@ -40,6 +40,11 @@ public class MoviesViewController: UIViewController {
         setupTextField()
     }
     
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.viewModel.checkFavorite()
+    }
+    
     //MARK: - Methods
     private func setupBindings() {
         
@@ -68,21 +73,30 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.filteredMovies.isEmpty ? viewModel.moviesResult.count : viewModel.filteredMovies.count
+        return viewModel.moviesResult.count
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = contentView.collectionView.dequeueReusableCell(withReuseIdentifier: MovieCard.identifier, for: indexPath) as! MovieCard
         
-        let movie = viewModel.filteredMovies.isEmpty ? viewModel.moviesResult[indexPath.row] : viewModel.filteredMovies[indexPath.row]
+        var movie = viewModel.moviesResult[indexPath.row]
         cell.configure(with: movie)
         
-        cell.isFavorite = movie.isFavorite
+        cell.isFavorite = movie.isFavorite ?? false
         
-//        cell.onFavoriteButtonTapped = { [weak self] in
-//            guard let self else { return }
-//            
-//        }
+        cell.onFavoriteButtonTapped = { [weak self] in
+            guard let self else { return }
+            
+            cell.isFavorite.toggle()
+            
+            if let index = MovieDB.shared.favoritedIds.firstIndex(where: { $0 == movie.id }) {
+                MovieDB.shared.favoritedIds.remove(at: index)
+            } else {
+                MovieDB.shared.favoritedIds.append(movie.id)
+            }
+            
+            viewModel.checkFavorite(with: movie.id)
+        }
         
         return cell
     }
@@ -115,7 +129,7 @@ extension MoviesViewController: UITextFieldDelegate {
 }
 
 extension MoviesViewController: MoviesViewModelDelegate {
-    func didGetMovies(movies: [MovieViewData]) {
+    func didGetMovies() {
         contentView.collectionView.reloadData()
     }
 }

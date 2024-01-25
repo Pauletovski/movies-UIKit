@@ -101,16 +101,19 @@ extension MoviesView: ViewCoded {
             headerStackView.topAnchor.constraint(equalTo: topAnchor),
             headerStackView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerStackView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            
             titleAppLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
             titleAppLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             titleAppLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: -40),
+            
             textField.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
             textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             textField.heightAnchor.constraint(equalToConstant: 30),
+            
             collectionView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -90)
         ])
     }
     

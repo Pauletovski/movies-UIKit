@@ -79,11 +79,9 @@ extension AddFilterViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        viewModel.favoriteViewModel.onGenreFilterSelected.send(viewModel.genresList[indexPath.row])
         contentView.onDismissTapped = {
             self.dismiss(animated: true)
         }
         contentView.dismissScreen()
     }
-    
 }

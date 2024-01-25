@@ -8,7 +8,13 @@
 import Foundation
 
 protocol MoviesViewModelDelegate: AnyObject {
-    func didGetMovies(movies: [MovieViewData])
+    func didGetMovies()
+}
+
+final class MovieDB {
+    static let shared: MovieDB = MovieDB()
+    
+    var favoritedIds: [Int] = [] 
 }
 
 class MoviesViewModel {
@@ -32,7 +38,7 @@ class MoviesViewModel {
             switch result {
             case .success(let movies):
                 self.moviesResult = movies.results.map { MovieViewData(movie: $0) }
-                self.delegate?.didGetMovies(movies: self.moviesResult)
+                self.checkFavorite()
             case .failure(let error):
                 print(error)
             }
@@ -41,5 +47,33 @@ class MoviesViewModel {
     
     func presentMovieDetails(movie: MovieViewData) {
         self.coordinator?.presentMovieDetails(movie: movie)
+    }
+    
+    func checkFavorite(with id: Int) {
+        let index = moviesResult.firstIndex(where: { $0.id == id })
+        
+        if let index { moviesResult[index].isFavorite = false }
+        
+        self.checkFavorite()
+    }
+    
+    func checkFavorite() {
+        resetFavorite()
+        
+        for (i, movie) in moviesResult.enumerated() {
+            if let index = MovieDB.shared.favoritedIds.firstIndex(of: movie.id) {
+                moviesResult[i].isFavorite = true
+            } else {
+                moviesResult[i].isFavorite = false
+            }
+        }
+        
+        self.delegate?.didGetMovies()
+    }
+    
+    private func resetFavorite() {
+        for i in 0..<moviesResult.count {
+            moviesResult[i].isFavorite = false
+        }
     }
 }
