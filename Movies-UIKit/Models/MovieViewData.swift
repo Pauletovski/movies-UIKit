@@ -7,12 +7,22 @@
 
 import Foundation
 
-struct MovieViewData: Hashable {
+struct MovieViewData: Hashable, Identifiable {
+    let id: Int
     let title: String
     let image: String
     let description: String
     let releaseDate: String
-    let id: Int
     let genreId: [Int]
     var isFavorite: Bool
+    
+    init(movie: Movie) {
+        self.title = movie.title
+        self.image = movie.posterPath
+        self.description = movie.overview
+        self.releaseDate = movie.releaseDate
+        self.id = movie.id
+        self.genreId = movie.genreIds
+        self.isFavorite = false
+    }
 }

@@ -40,37 +40,18 @@ public class FavoriteViewController: UIViewController {
         configKeyboard()
         
         setupTextField()
-        
-        viewModel.reloadData
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.contentView.collectionView.reloadData()
-            }.store(in: &viewModel.cancelSet)
-        
-        viewModel.onGenreFilterSelected
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] genre in
-                guard let self else { return }
-                self.contentView.removeFilterButton.isHidden = false
-                self.contentView.filterLabel.isHidden = false
-                self.contentView.configureFilterLabel(text: genre.name)
-                self.contentView.updateCollectionViewTopConstraintForFiltersOn()
-            }.store(in: &viewModel.cancelSet)
-
     }
     
     //MARK: - Methods
     private func setupBindings() {
         contentView.onAddFilterTapped = {
-            self.viewModel.coordinator.presentAddFilter()
+            
         }
         
         contentView.onRemoveFilterTapped = {
             self.contentView.removeFilterButton.isHidden = true
             self.contentView.filterLabel.isHidden = true
             self.contentView.updateCollectionViewTopConstraint()
-            self.viewModel.onFiltersRemoved.send()
         }
     }
     
@@ -112,14 +93,13 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
         cell.onFavoriteButtonTapped = { [weak self] in
             guard let self else { return }
             
-            self.viewModel.onFavoriteChanged.send(movie.id)
         }
         
         return cell
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.homeViewModel.onPresentMovieDetails.send(viewModel.filteredMovies.isEmpty ? viewModel.moviesFavorite[indexPath.row] : viewModel.filteredMovies[indexPath.row])
+        print(collectionView)
     }
 }
 

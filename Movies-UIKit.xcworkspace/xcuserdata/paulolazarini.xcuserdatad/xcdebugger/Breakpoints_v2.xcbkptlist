@@ -7,65 +7,97 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2D6F9D90-425A-4FF5-8668-94EC0CE91765"
+            uuid = "F64DA931-31F7-40B6-8776-E56A7B67C710"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Movies-UIKit/Screens/Home/HomeViewModel.swift"
+            filePath = "Movies-UIKit/Screens/Favorite/FavoriteViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
-            landmarkName = "init(networkProvider:coordinator:)"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "setupBindings()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "317FC5EB-4429-420A-8140-4C7BFFFECF78"
-            shouldBeEnabled = "No"
+            uuid = "A8DEC68A-4AE0-4E2E-B4A2-C9F5535EBDEB"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Movies-UIKit/Screens/Home/HomeViewModel.swift"
+            filePath = "Movies-UIKit/Screens/MovieDetails/MovieDetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "41"
-            endingLineNumber = "41"
-            landmarkName = "init(networkProvider:coordinator:)"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "didReceiveMovieDetails(movie:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "317FC5EB-4429-420A-8140-4C7BFFFECF78 - c38c753df6917837"
+                  uuid = "A8DEC68A-4AE0-4E2E-B4A2-C9F5535EBDEB - 38df3f0ca51ba8e6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "Movies_UIKit.HomeViewModel.init(networkProvider: Movies_UIKit.Networkable, coordinator: Movies_UIKit.MoviesCoordinator) -&gt; Movies_UIKit.HomeViewModel"
+                  symbolName = "Movies_UIKit.MovieDetailsViewController.didReceiveMovieDetails(movie: Movies_UIKit.MovieViewData) -&gt; ()"
                   moduleName = "Movies-UIKit"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Home/HomeViewModel.swift"
+                  urlString = "file:///Users/paulolazarini/Desktop/Dev-folder/Development/Movies-UIKit/Movies-UIKit/Screens/MovieDetails/MovieDetailsViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "728">
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "112">
                </Location>
                <Location
-                  uuid = "317FC5EB-4429-420A-8140-4C7BFFFECF78 - 40f1091375053a54"
+                  uuid = "A8DEC68A-4AE0-4E2E-B4A2-C9F5535EBDEB - 38df3f0ca51ba8e6"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (Swift.Int) -&gt; () in Movies_UIKit.HomeViewModel.init(networkProvider: Movies_UIKit.Networkable, coordinator: Movies_UIKit.MoviesCoordinator) -&gt; Movies_UIKit.HomeViewModel"
+                  symbolName = "Movies_UIKit.MovieDetailsViewController.didReceiveMovieDetails(movie: Movies_UIKit.MovieViewData) -&gt; ()"
                   moduleName = "Movies-UIKit"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/paulolazarini/Desktop/Development/Movies-UIKit/Movies-UIKit/Screens/Home/HomeViewModel.swift"
+                  urlString = "file:///Users/paulolazarini/Desktop/Dev-folder/Development/Movies-UIKit/Movies-UIKit/Screens/MovieDetails/MovieDetailsViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "43"
-                  endingLineNumber = "43"
-                  offsetFromSymbolStart = "84">
+                  startingLineNumber = "47"
+                  endingLineNumber = "47"
+                  offsetFromSymbolStart = "40">
                </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1CF7F78E-35D4-4D24-90BF-94F2374315F9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Movies-UIKit/Screens/MovieDetails/MovieDetailsViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "30"
+            endingLineNumber = "30"
+            landmarkName = "getMovieDetails()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B348F9B3-50E4-4D7F-9D12-E5AB408F97E9"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Movies-UIKit/Screens/Home/MoviesViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "119"
+            endingLineNumber = "119"
+            landmarkName = "didGetMovies(movies:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

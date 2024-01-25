@@ -6,20 +6,21 @@
 //
 
 import UIKit
-import Combine
-import SwiftUI
 
 public class MovieDetailsViewController: UIViewController {
     
     //MARK: - Properties
-    private var cancelSet = Set<AnyCancellable>()
     lazy var contentView: MovieDetailsView = {
         MovieDetailsView()
     }()
     
+    private var viewModel: MovieDetailsViewModel
+    
     //MARK: - Init
-    init() {
+    init(viewModel: MovieDetailsViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -34,5 +35,15 @@ public class MovieDetailsViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        setupBindings()
+        contentView.configure(with: viewModel.movie)
+    }
+    
+    private func setupBindings() { }
+}
+
+extension MovieDetailsViewController: MovieDetailsViewModelDelegate {
+    func didReceiveMovieDetails(movie: MovieViewData) {
+        contentView.configure(with: movie)
     }
 }

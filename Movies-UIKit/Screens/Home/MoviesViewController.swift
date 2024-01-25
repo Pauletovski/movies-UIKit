@@ -6,22 +6,20 @@
 //
 
 import UIKit
-import Combine
-import SwiftUI
 
-public class HomeViewController: UIViewController {
+public class MoviesViewController: UIViewController {
     
     //MARK: - Properties
-    private var viewModel: HomeViewModel
-    private var cancelSet = Set<AnyCancellable>()
-    lazy private var contentView: HomeView = {
-        HomeView()
+    private var viewModel: MoviesViewModel
+    lazy private var contentView: MoviesView = {
+        MoviesView()
     }()
     
     //MARK: - Init
-    init(viewModel: HomeViewModel) {
+    init(viewModel: MoviesViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -40,13 +38,6 @@ public class HomeViewController: UIViewController {
         configKeyboard()
         
         setupTextField()
-        
-        viewModel.reloadData
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.contentView.collectionView.reloadData()
-            }.store(in: &viewModel.cancelSet)
     }
     
     //MARK: - Methods
@@ -69,12 +60,11 @@ public class HomeViewController: UIViewController {
 
     //MARK: - CollectionViewConfiguration
 
-extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     private func setupCollectionView() {
         contentView.collectionView.register(MovieCard.self, forCellWithReuseIdentifier: MovieCard.identifier)
         contentView.collectionView.dataSource = self
         contentView.collectionView.delegate = self
-        
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -89,21 +79,21 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         
         cell.isFavorite = movie.isFavorite
         
-        cell.onFavoriteButtonTapped = { [weak self] in
-            guard let self else { return }
-            
-            self.viewModel.onFavoriteChanged.send(movie.id)
-        }
+//        cell.onFavoriteButtonTapped = { [weak self] in
+//            guard let self else { return }
+//            
+//        }
         
         return cell
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.onPresentMovieDetails.send(viewModel.filteredMovies.isEmpty ? viewModel.moviesResult[indexPath.row] : viewModel.filteredMovies[indexPath.row])
+        let movie = viewModel.moviesResult[indexPath.row]
+        self.viewModel.presentMovieDetails(movie: movie)
     }
 }
 
-extension HomeViewController: UITextFieldDelegate {
+extension MoviesViewController: UITextFieldDelegate {
     
     private func setupTextField() {
         contentView.textField.delegate = self
@@ -121,5 +111,11 @@ extension HomeViewController: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+extension MoviesViewController: MoviesViewModelDelegate {
+    func didGetMovies(movies: [MovieViewData]) {
+        contentView.collectionView.reloadData()
     }
 }

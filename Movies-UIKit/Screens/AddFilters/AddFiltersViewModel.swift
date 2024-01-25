@@ -6,31 +6,27 @@
 //
 
 import Foundation
-import Combine
 
 class AddFiltersViewModel {
     let networkProvider: Networkable
-    var favoriteViewModel: FavoriteViewModel
     
     var genresList: [Genre] = []
     
-    let reloadData = PassthroughSubject<Void, Never>()
-    
-    
-    var cancelSet = Set<AnyCancellable>()
-    
-    init(networkProvider: Networkable, favoriteViewModel: FavoriteViewModel){
+    init(networkProvider: Networkable){
         self.networkProvider = networkProvider
-        self.favoriteViewModel = favoriteViewModel
         
         getGenreList()
-        
     }
     
     func getGenreList() {
-        networkProvider.getGenreList { [weak self] genres in
-            self?.genresList = genres.map({ $0})
-            self?.reloadData.send()
+        Task { @MainActor in
+            let result = await self.networkProvider.getGenreList()
+            switch result {
+            case .success(let genres):
+                self.genresList = genres
+            case .failure(let error):
+                print(error)
+            }
         }
     }
 }

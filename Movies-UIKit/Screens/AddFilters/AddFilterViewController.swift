@@ -39,12 +39,12 @@ public class AddFilterViewController: UIViewController {
         
         setup()
         
-        viewModel.reloadData
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                self.contentView.genreList.reloadData()
-            }.store(in: &viewModel.cancelSet)
+//        viewModel.reloadData
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] _ in
+//                guard let self else { return }
+//                self.contentView.genreList.reloadData()
+//            }.store(in: &viewModel.cancelSet)
     }
     
     //MARK: - Methods
@@ -79,7 +79,7 @@ extension AddFilterViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.favoriteViewModel.onGenreFilterSelected.send(viewModel.genresList[indexPath.row])
+//        viewModel.favoriteViewModel.onGenreFilterSelected.send(viewModel.genresList[indexPath.row])
         contentView.onDismissTapped = {
             self.dismiss(animated: true)
         }

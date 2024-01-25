@@ -10,6 +10,7 @@ import Moya
 
 enum NetworkRequest {
     case getMovies(page: Int)
+    case getDetails(id: Int)
     case getGenre
 }
 
@@ -18,9 +19,7 @@ extension NetworkRequest: TargetType {
     static let MovieAPIKey = "9f041eb26e51673e9eb8ba9e63adb9fe"
     
     var enviromentBaseURL: String {
-        switch NetworkManager.enviroment {
-        case.popularMovie: return "https://api.themoviedb.org/3"
-        }
+       "https://api.themoviedb.org/3"
     }
     
     var baseURL: URL {
@@ -32,6 +31,8 @@ extension NetworkRequest: TargetType {
         switch self {
         case .getMovies:
             return "/movie/popular"
+        case .getDetails(let id):
+            return "/movie/\(id)"
         case .getGenre:
             return "/genre/movie/list"
         }
@@ -49,13 +50,17 @@ extension NetworkRequest: TargetType {
         switch self {
         case .getMovies(let page):
             return .requestParameters(parameters: ["api_key" : "\(NetworkRequest.MovieAPIKey)",
-                                              "language" : "en-US",
-                                              "page" : "\(page)"],
-                                              encoding: URLEncoding.queryString)
+                                                   "language" : "en-US",
+                                                   "page" : "\(page)"],
+                                                    encoding: URLEncoding.queryString)
+        case .getDetails:
+            return .requestParameters(parameters: ["api_key" : "\(NetworkRequest.MovieAPIKey)",
+                                                   "language" : "en-US"],
+                                                    encoding: URLEncoding.queryString)
         case .getGenre:
             return .requestParameters(parameters: ["api_key" : "\(NetworkRequest.MovieAPIKey)",
-                                              "language" : "en-US"],
-                                              encoding: URLEncoding.queryString)
+                                                   "language" : "en-US"],
+                                                    encoding: URLEncoding.queryString)
         }
     }
     

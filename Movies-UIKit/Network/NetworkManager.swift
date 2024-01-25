@@ -6,56 +6,99 @@
 //
 
 import Foundation
-import Combine
 import Moya
 
 protocol Networkable {
-    var provider: MoyaProvider<NetworkRequest> { get }
-    func getNewMovies(page: Int, completion: @escaping ([Movie]) -> ())
-    func getGenreList(completion: @escaping ([Genre]) -> ())
+    var networkRequest: MoyaProvider<NetworkRequest> { get }
+    func getMovies(page: Int) async -> Result<Movies, CustomError>
+    func getMovieDetails(id: Int) async -> Result<Movie, CustomError>
+    func getGenreList() async -> Result<[Genre], CustomError>
 }
 
-enum APIEnviroment {
-    case popularMovie
-//    case listMovie
+class NetworkManager: Networkable {
+    
+    var networkRequest = MoyaProvider<NetworkRequest>()
+    
+    func getMovies(page: Int) async -> Result<Movies, CustomError> {
+        await networkRequest.requestModel(.getMovies(page: 1), Movies.self)
+    }
+    
+    func getMovieDetails(id: Int) async -> Result<Movie, CustomError> {
+        await networkRequest.requestModel(.getDetails(id: id), Movie.self)
+    }
+    
+    func getGenreList() async -> Result<[Genre], CustomError> {
+        await networkRequest.requestModel(.getGenre, [Genre].self)
+    }
 }
 
-struct NetworkManager: Networkable {
-    
-    var provider = MoyaProvider<NetworkRequest>()
-    static let enviroment: APIEnviroment = .popularMovie
-    
-    func getNewMovies(page: Int, completion: @escaping ([Movie])->()) {
-        provider.request(.getMovies(page: page)) { result in
-            switch result {
-            case let .success(response):
-                do {
-                    let results = try JSONDecoder().decode(MovieResults.self, from: response.data)
-                    completion(results.results)
-                } catch let err {
-                    print(err)
+public enum CustomError: Error {
+    case objectDeallocated, parsingError, networkError
+}
 
+
+// MARK: - Generic Combine Request
+extension MoyaProvider {
+    func requestAsync(_ target: Target) async throws -> Response {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.request(target) { result in
+                switch result {
+                case .success(let response):
+                    continuation.resume(returning: response)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
                 }
-            case let .failure(error):
-                print(error)
             }
         }
     }
     
-    func getGenreList(completion: @escaping ([Genre]) -> ()) {
-        provider.request(.getGenre) { result in
-            switch result {
-            case let .success(response):
-                do {
-                    let results = try JSONDecoder().decode(Genres.self, from: response.data)
-                    completion(results.genres)
-                } catch let err {
-                    print(err)
-                    
-                }
-            case let .failure(error):
-                print(error)
-            }
+    func requestModel<T: Decodable>(_ target: Target, _: T.Type) async -> Result<T, CustomError> {
+        do {
+            let response = try await self.requestAsync(target)
+            let result = try JSONDecoder().decode(T.self, from: response.data)
+            return .success(result)
+        } catch {
+            return .failure(CustomError.networkError)
         }
     }
 }
+
+
+
+
+// MARK: - Generic Combine Request
+//public extension MoyaProvider {
+//    func requestModel<T: Decodable>(_ target: Target, responseType: T.Type) -> AnyPublisher<Result<T, CustomError>, Never> {
+//        return Future { promise in
+//            self.request(target) { result in
+//                switch result {
+//                case .success(let response):
+//                    do {
+//                        let decodedData = try JSONDecoder().decode(T.self, from: response.data)
+//                        promise(.success(.success(decodedData)))
+//                    } catch {
+//                        promise(.success(.failure(.parsingError)))
+//                    }
+//
+//                case .failure(_):
+//                    promise(.success(.failure(.networkError)))
+//                }
+//            }
+//        }
+//        .eraseToAnyPublisher()
+//    }
+//    
+//    func request(_ target: Target) -> AnyPublisher<Result<Void, CustomError>, Never> {
+//        return Future { promise in
+//            self.request(target) { result in
+//                switch result {
+//                case .success(_):
+//                    promise(.success(.success(())))
+//                case .failure(_):
+//                    promise(.success(.failure(.networkError)))
+//                }
+//            }
+//        }
+//        .eraseToAnyPublisher()
+//    }
+//}

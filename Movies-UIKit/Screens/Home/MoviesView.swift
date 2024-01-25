@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import SwiftUI
 
-class HomeView: UIView {
+class MoviesView: UIView {
     
     //MARK: - Properties
     
@@ -27,7 +26,8 @@ class HomeView: UIView {
     }()
 
     func configureCollectionViewLayout() {
-        let cellWidth: CGFloat = 180
+        let cellFullWidth: CGFloat = (UIScreen.main.bounds.width - flowLayout.sectionInset.left - flowLayout.sectionInset.right - flowLayout.minimumInteritemSpacing - 20)
+        let cellWidth: CGFloat = cellFullWidth / 2
         let cellHeight: CGFloat = 300
         flowLayout.itemSize = CGSize(width: cellWidth, height: cellHeight)
     }
@@ -87,7 +87,7 @@ class HomeView: UIView {
 }
 
 //MARK: - ViewCode
-extension HomeView: ViewCoded {
+extension MoviesView: ViewCoded {
     func buildViewHierarchy() {
         addSubview(headerStackView)
         headerStackView.addArrangedSubview(titleAppLabel)
@@ -110,7 +110,7 @@ extension HomeView: ViewCoded {
             collectionView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 10),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -100)
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
     
