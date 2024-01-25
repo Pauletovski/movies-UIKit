@@ -11,12 +11,6 @@ protocol MoviesViewModelDelegate: AnyObject {
     func didGetMovies()
 }
 
-final class MovieDB {
-    static let shared: MovieDB = MovieDB()
-    
-    var favoritedIds: [Int] = [] 
-}
-
 class MoviesViewModel {
     private let networkProvider: Networkable
     weak var coordinator: AppCoordinating?
@@ -29,7 +23,6 @@ class MoviesViewModel {
     
     init(networkProvider: Networkable) {
         self.networkProvider = networkProvider
-        self.getMovies(page: 1)
     }
     
     func getMovies(page: Int) {

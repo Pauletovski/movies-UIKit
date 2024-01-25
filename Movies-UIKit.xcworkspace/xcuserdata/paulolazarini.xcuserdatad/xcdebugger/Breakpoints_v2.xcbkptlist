@@ -206,8 +206,8 @@
             filePath = "Movies-UIKit/Screens/Home/MoviesViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
+            startingLineNumber = "56"
+            endingLineNumber = "56"
             landmarkName = "checkFavorite()"
             landmarkType = "7">
          </BreakpointContent>

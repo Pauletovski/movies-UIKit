@@ -42,7 +42,7 @@ public class MoviesViewController: UIViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.checkFavorite()
+        self.viewModel.getMovies(page: 1)
     }
     
     //MARK: - Methods
