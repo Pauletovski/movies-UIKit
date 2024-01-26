@@ -19,6 +19,7 @@ public class AddFilterViewController: UIViewController {
     init(viewModel: AddFiltersViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.viewModel.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -36,12 +37,6 @@ public class AddFilterViewController: UIViewController {
         
         setup()
         
-//        viewModel.reloadData
-//            .receive(on: DispatchQueue.main)
-//            .sink { [weak self] _ in
-//                guard let self else { return }
-//                self.contentView.genreList.reloadData()
-//            }.store(in: &viewModel.cancelSet)
     }
     
     //MARK: - Methods
@@ -76,10 +71,14 @@ extension AddFilterViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        contentView.onDismissTapped = {
-            self.dismiss(animated: true)
-        }
-        
-        contentView.dismissScreen()
+        let genre = viewModel.genresList[indexPath.row]
+        self.viewModel.selectedGenre(genre)
+        self.contentView.dismissScreen()
+    }
+}
+
+extension AddFilterViewController: AddFiltersViewModelDelegate {
+    func reloadData() {
+        self.contentView.genreList.reloadData()
     }
 }

@@ -7,15 +7,22 @@
 
 import Foundation
 
-class AddFiltersViewModel {
-    let networkProvider: Networkable
+protocol AddFiltersViewModelDelegate: AnyObject {
+    func reloadData()
+}
+
+final class AddFiltersViewModel: NSObject {
+    weak var coordinator: AppCoordinating?
+    weak var delegate: AddFiltersViewModelDelegate?
     
+    let networkProvider: Networkable
     var genresList: [Genre] = []
     
-    init(networkProvider: Networkable){
+    init(networkProvider: Networkable) {
         self.networkProvider = networkProvider
+        super.init()
         
-        getGenreList()
+        self.getGenreList()
     }
     
     func getGenreList() {
@@ -23,11 +30,16 @@ class AddFiltersViewModel {
             let result = await self.networkProvider.getGenreList()
             switch result {
             case .success(let genres):
-                self.genresList = genres
+                self.genresList = genres.genres
+                self.delegate?.reloadData()
             case .failure(let error):
                 print(error)
             }
         }
+    }
+    
+    func selectedGenre(_ genre: Genre) {
+        MovieDB.shared.genreSelected = genre
     }
 }
 

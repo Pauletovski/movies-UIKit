@@ -9,15 +9,23 @@ import Foundation
 
 protocol FavoriteViewModelDelegate: AnyObject {
     func reloadData()
+    func didSelectedGenre(_ genre: Genre)
 }
 
 protocol FavoriteViewModelType: AnyObject {
     var networkProvider: Networkable { get set }
+    var delegate: FavoriteViewModelDelegate? { get set }
+    var moviesResult: [MovieViewData] { get set }
+    
     func getFavoriteMovies(page: Int)
-    func presentMovieDetails(movie: MovieViewData)
     func handleFavoriteTapped(with id: Int)
     func checkFavorite()
     func searchFilter(using searchText: String)
+    func genreFilter()
+    func removeGenreFilter()
+    
+    func presentMovieDetails(movie: MovieViewData)
+    func presentAddFilter()
 }
 
 final class FavoriteViewModel: NSObject, FavoriteViewModelType {
@@ -41,6 +49,7 @@ final class FavoriteViewModel: NSObject, FavoriteViewModelType {
             case .success(let movies):
                 self.moviesResult = movies.results.map { MovieViewData(movie: $0) }
                 self.checkFavorite()
+                self.genreFilter()
             case .failure(let error):
                 print(error)
             }
@@ -51,6 +60,12 @@ final class FavoriteViewModel: NSObject, FavoriteViewModelType {
         self.coordinator?.presentMovieDetails(movie: movie)
     }
     
+    func presentAddFilter() {
+        self.coordinator?.presentAddFilter() { [weak self] in
+            self?.genreFilter()
+        }
+    }
+ 
     func handleFavoriteTapped(with id: Int) {
         let index = moviesResult.firstIndex(where: { $0.id == id })
         
@@ -76,5 +91,20 @@ final class FavoriteViewModel: NSObject, FavoriteViewModelType {
     func searchFilter(using searchText: String) {
         self.moviesResult = allFavoritedMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
         self.delegate?.reloadData()
+    }
+    
+    func genreFilter() {
+        guard let genre = MovieDB.shared.genreSelected else { return }
+        
+        self.moviesResult = allFavoritedMovies.filter { $0.genreId.contains(genre.id) }
+        self.delegate?.didSelectedGenre(genre)
+        self.delegate?.reloadData()
+    }
+    
+    func removeGenreFilter() {
+        guard let genre = MovieDB.shared.genreSelected else { return }
+        
+        MovieDB.shared.genreSelected = nil
+        getFavoriteMovies(page: 1)
     }
 }

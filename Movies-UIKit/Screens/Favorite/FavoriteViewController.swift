@@ -10,7 +10,7 @@ import UIKit
 final class FavoriteViewController: UIViewController {
     
     //MARK: - Properties
-    private var viewModel: FavoriteViewModel
+    private var viewModel: FavoriteViewModelType
     lazy private var contentView: FavoriteView = {
         FavoriteView()
     }()
@@ -48,13 +48,14 @@ final class FavoriteViewController: UIViewController {
     //MARK: - Methods
     private func setupBindings() {
         contentView.onAddFilterTapped = {
-            
+            self.viewModel.presentAddFilter()
         }
         
         contentView.onRemoveFilterTapped = {
             self.contentView.removeFilterButton.isHidden = true
             self.contentView.filterLabel.isHidden = true
             self.contentView.updateCollectionViewTopConstraint()
+            self.viewModel.removeGenreFilter()
         }
     }
     
@@ -111,11 +112,19 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print(collectionView)
+        let movie = viewModel.moviesResult[indexPath.row]
+        self.viewModel.presentMovieDetails(movie: movie)
     }
 }
 
 extension FavoriteViewController: FavoriteViewModelDelegate {
+    func didSelectedGenre(_ genre: Genre) {
+        self.contentView.removeFilterButton.isHidden = false
+        self.contentView.filterLabel.isHidden = false
+        self.contentView.configureFilterLabel(text: genre.name)
+        self.contentView.updateCollectionViewTopConstraintForFiltersOn()
+    }
+    
     func reloadData() {
         contentView.collectionView.reloadData()
     }

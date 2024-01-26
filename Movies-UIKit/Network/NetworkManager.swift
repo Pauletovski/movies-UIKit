@@ -10,9 +10,10 @@ import Moya
 
 protocol Networkable {
     var networkRequest: MoyaProvider<NetworkRequest> { get }
+    
     func getMovies(page: Int) async -> Result<Movies, CustomError>
     func getMovieDetails(id: Int) async -> Result<MovieDetails, CustomError>
-    func getGenreList() async -> Result<[Genre], CustomError>
+    func getGenreList() async -> Result<Genres, CustomError>
 }
 
 class NetworkManager: Networkable {
@@ -27,8 +28,8 @@ class NetworkManager: Networkable {
         await networkRequest.requestModel(.getDetails(id: id), MovieDetails.self)
     }
     
-    func getGenreList() async -> Result<[Genre], CustomError> {
-        await networkRequest.requestModel(.getGenre, [Genre].self)
+    func getGenreList() async -> Result<Genres, CustomError> {
+        await networkRequest.requestModel(.getGenre, Genres.self)
     }
 }
 

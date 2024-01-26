@@ -13,11 +13,16 @@ protocol MoviesViewModelDelegate: AnyObject {
 
 protocol MoviesViewModelType: AnyObject {
     var networkProvider: Networkable { get set }
+    var delegate: MoviesViewModelDelegate? { get set }
+    var coordinator: AppCoordinating? { get set }
+    var moviesResult: [MovieViewData] { get set }
+    
     func getMovies(page: Int)
-    func presentMovieDetails(movie: MovieViewData)
     func handleFavoriteTapped(with id: Int)
     func checkFavorite()
     func searchFilter(using searchText: String)
+    
+    func presentMovieDetails(movie: MovieViewData)
 }
 
 final class MoviesViewModel: NSObject, MoviesViewModelType {

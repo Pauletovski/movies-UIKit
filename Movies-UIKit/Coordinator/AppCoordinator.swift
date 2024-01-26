@@ -9,6 +9,7 @@ import UIKit
 
 protocol AppCoordinating: Coordinator {
     func presentMovieDetails(movie: MovieViewData)
+    func presentAddFilter(onDismiss: @escaping () -> Void)
 }
 
 class AppCoordinator: AppCoordinating {
@@ -44,21 +45,23 @@ class AppCoordinator: AppCoordinating {
         viewController.modalPresentationStyle = .pageSheet
         
         viewController.contentView.onDismissTapped = {
-            self.navigationController.dismiss(animated: true)
+            self.dismiss(true)
         }
         
-        navigationController.present(viewController, animated: true)
+        present(viewController, true)
     }
     
-    func presentAddFilter() {
+    func presentAddFilter(onDismiss: @escaping () -> Void) {
         let viewModel = AddFiltersViewModel(networkProvider: networkManager)
+        viewModel.coordinator = self
         let viewController = AddFilterViewController(viewModel: viewModel)
         
         viewController.contentView.onDismissTapped = {
-            self.navigationController.dismiss(animated: true)
+            onDismiss()
+            self.dismiss(true)
         }
         
-        navigationController.present(viewController, animated: true)
+        present(viewController, true)
     }
 }
 
@@ -78,6 +81,26 @@ extension AppCoordinator {
             viewController.tabBarItem = tabBarPage.tabBarItem
             return viewController
         }
+    }
+}
+
+// MARK: - METHODS
+
+extension AppCoordinator {
+    private func push(_ vc: UIViewController, _ animated: Bool = false) {
+        self.navigationController.pushViewController(vc, animated: animated)
+    }
+    
+    private func popVC(_ animated: Bool = false) {
+        self.navigationController.popViewController(animated: animated)
+    }
+    
+    private func dismiss(_ animated: Bool = false) {
+        self.navigationController.dismiss(animated: animated)
+    }
+    
+    private func present(_ vc: UIViewController, _ animated: Bool = false) {
+        self.navigationController.present(vc, animated: animated)
     }
 }
 

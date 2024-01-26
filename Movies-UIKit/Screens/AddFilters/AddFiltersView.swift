@@ -91,8 +91,11 @@ extension AddFiltersView: ViewCoded {
             headerView.leadingAnchor.constraint(equalTo: leadingAnchor),
             headerView.trailingAnchor.constraint(equalTo: trailingAnchor),
             headerView.heightAnchor.constraint(equalToConstant: 50),
+            
             filterDismiss.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 8),
+            
             filterTitle.centerXAnchor.constraint(equalTo: headerView.centerXAnchor),
+            
             genreList.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             genreList.leadingAnchor.constraint(equalTo: leadingAnchor),
             genreList.trailingAnchor.constraint(equalTo: trailingAnchor),

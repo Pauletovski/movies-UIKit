@@ -10,7 +10,7 @@ import UIKit
 public class MoviesViewController: UIViewController {
     
     //MARK: - Properties
-    private var viewModel: MoviesViewModel
+    private var viewModel: MoviesViewModelType
     lazy private var contentView: MoviesView = {
         MoviesView()
     }()
