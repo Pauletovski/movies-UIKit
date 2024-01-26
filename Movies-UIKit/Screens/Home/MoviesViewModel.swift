@@ -8,7 +8,7 @@
 import Foundation
 
 protocol MoviesViewModelDelegate: AnyObject {
-    func didGetMovies()
+    func reloadData()
 }
 
 class MoviesViewModel {
@@ -61,7 +61,7 @@ class MoviesViewModel {
         }
         
         self.allMovies = self.moviesResult
-        self.delegate?.didGetMovies()
+        self.delegate?.reloadData()
     }
     
     private func resetFavorite() {
@@ -72,6 +72,6 @@ class MoviesViewModel {
     
     func searchFilter(using searchText: String) {
         self.moviesResult = allMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
-        self.delegate?.didGetMovies()
+        self.delegate?.reloadData()
     }
 }

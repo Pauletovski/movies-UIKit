@@ -127,7 +127,7 @@ extension MoviesViewController: UITextFieldDelegate {
 }
 
 extension MoviesViewController: MoviesViewModelDelegate {
-    func didGetMovies() {
+    func reloadData() {
         contentView.collectionView.reloadData()
     }
 }

@@ -119,7 +119,7 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
 }
 
 extension FavoriteViewController: FavoriteViewModelDelegate {
-    func didGetMovies() {
+    func reloadData() {
         contentView.collectionView.reloadData()
     }
 }

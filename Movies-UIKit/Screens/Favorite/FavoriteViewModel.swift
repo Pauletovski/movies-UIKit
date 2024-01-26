@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FavoriteViewModelDelegate: AnyObject {
-    func didGetMovies()
+    func reloadData()
 }
 
 class FavoriteViewModel: NSObject {
@@ -62,11 +62,11 @@ class FavoriteViewModel: NSObject {
         
         self.moviesResult = self.moviesResult.filter({ $0.isFavorite ?? true })
         self.allFavoritedMovies = self.moviesResult
-        self.delegate?.didGetMovies()
+        self.delegate?.reloadData()
     }
     
     func searchFilter(using searchText: String) {
         self.moviesResult = allFavoritedMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
-        self.delegate?.didGetMovies()
+        self.delegate?.reloadData()
     }
 }
