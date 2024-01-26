@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import SwiftUI
 
-class FavoriteView: UIView {
+final class FavoriteView: UIView {
     
     //MARK: - Properties
     

@@ -6,20 +6,28 @@
 //
 
 import Foundation
-import Combine
 
 protocol FavoriteViewModelDelegate: AnyObject {
     func reloadData()
 }
 
-class FavoriteViewModel: NSObject {
-    let networkProvider: Networkable
+protocol FavoriteViewModelType: AnyObject {
+    var networkProvider: Networkable { get set }
+    func getFavoriteMovies(page: Int)
+    func presentMovieDetails(movie: MovieViewData)
+    func handleFavoriteTapped(with id: Int)
+    func checkFavorite()
+    func searchFilter(using searchText: String)
+}
+
+final class FavoriteViewModel: NSObject, FavoriteViewModelType {
     weak var coordinator: AppCoordinating?
     weak var delegate: FavoriteViewModelDelegate?
     
+    private var allFavoritedMovies: [MovieViewData] = []
+    
+    var networkProvider: Networkable
     var moviesResult: [MovieViewData] = []
-    var allFavoritedMovies: [MovieViewData] = []
-    var searchText: String = ""
     
     init(networkProvider: Networkable){
         self.networkProvider = networkProvider

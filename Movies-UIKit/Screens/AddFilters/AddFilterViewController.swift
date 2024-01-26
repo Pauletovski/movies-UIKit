@@ -6,14 +6,11 @@
 //
 
 import UIKit
-import Combine
-import SwiftUI
 
 public class AddFilterViewController: UIViewController {
     
     //MARK: - Properties
     private var viewModel: AddFiltersViewModel
-    private var cancelSet = Set<AnyCancellable>()
     lazy var contentView: AddFiltersView = {
         AddFiltersView()
     }()
@@ -82,6 +79,7 @@ extension AddFilterViewController: UITableViewDelegate, UITableViewDataSource {
         contentView.onDismissTapped = {
             self.dismiss(animated: true)
         }
+        
         contentView.dismissScreen()
     }
 }

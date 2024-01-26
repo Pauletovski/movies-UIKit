@@ -11,14 +11,23 @@ protocol MoviesViewModelDelegate: AnyObject {
     func reloadData()
 }
 
-class MoviesViewModel {
-    private let networkProvider: Networkable
+protocol MoviesViewModelType: AnyObject {
+    var networkProvider: Networkable { get set }
+    func getMovies(page: Int)
+    func presentMovieDetails(movie: MovieViewData)
+    func handleFavoriteTapped(with id: Int)
+    func checkFavorite()
+    func searchFilter(using searchText: String)
+}
+
+final class MoviesViewModel: NSObject, MoviesViewModelType {
     weak var coordinator: AppCoordinating?
     weak var delegate: MoviesViewModelDelegate?
     
+    private var allMovies: [MovieViewData] = []
+    
+    var networkProvider: Networkable
     var moviesResult: [MovieViewData] = []
-    var allMovies: [MovieViewData] = []
-    var searchText: String = ""
     
     init(networkProvider: Networkable) {
         self.networkProvider = networkProvider

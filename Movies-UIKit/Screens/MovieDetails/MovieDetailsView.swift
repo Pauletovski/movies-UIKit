@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import SwiftUI
 import Nuke
-import Combine
 
 class MovieDetailsView: UIView {
     

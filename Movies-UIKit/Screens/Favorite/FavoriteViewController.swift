@@ -6,14 +6,11 @@
 //
 
 import UIKit
-import Combine
-import SwiftUI
 
-public class FavoriteViewController: UIViewController {
+final class FavoriteViewController: UIViewController {
     
     //MARK: - Properties
     private var viewModel: FavoriteViewModel
-    private var cancelSet = Set<AnyCancellable>()
     lazy private var contentView: FavoriteView = {
         FavoriteView()
     }()
