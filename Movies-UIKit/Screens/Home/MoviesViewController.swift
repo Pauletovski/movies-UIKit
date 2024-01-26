@@ -95,7 +95,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
                 MovieDB.shared.favoritedIds.append(movie.id)
             }
             
-            viewModel.checkFavorite(with: movie.id)
+            viewModel.handleFavoriteTapped(with: movie.id)
         }
         
         return cell
@@ -108,18 +108,16 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
 }
 
 extension MoviesViewController: UITextFieldDelegate {
-    
     private func setupTextField() {
         contentView.textField.delegate = self
     }
     
     public func textFieldDidChangeSelection(_ textField: UITextField) {
         if let searchText = textField.text, !searchText.isEmpty {
-            viewModel.filteredMovies = viewModel.moviesResult.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+            viewModel.searchFilter(using: searchText)
         } else {
-            viewModel.filteredMovies = []
+            viewModel.getMovies(page: 1)
         }
-        contentView.collectionView.reloadData()
     }
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {

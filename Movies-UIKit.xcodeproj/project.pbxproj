@@ -119,6 +119,14 @@
 			path = DB;
 			sourceTree = "<group>";
 		};
+		E01CED1A2B62D6CD00C40239 /* ViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E04413142A16A9AF0005CCBF /* CustomTableViewCell.swift */,
+			);
+			path = ViewCell;
+			sourceTree = "<group>";
+		};
 		E042E07E2A13FF9000DA74CF /* Models */ = {
 			isa = PBXGroup;
 			children = (
@@ -140,10 +148,10 @@
 		E044130D2A1666850005CCBF /* AddFilters */ = {
 			isa = PBXGroup;
 			children = (
+				E01CED1A2B62D6CD00C40239 /* ViewCell */,
 				E044130E2A1666FE0005CCBF /* AddFiltersView.swift */,
 				E04413102A16678D0005CCBF /* AddFilterViewController.swift */,
 				E04413122A166C3A0005CCBF /* AddFiltersViewModel.swift */,
-				E04413142A16A9AF0005CCBF /* CustomTableViewCell.swift */,
 			);
 			path = AddFilters;
 			sourceTree = "<group>";

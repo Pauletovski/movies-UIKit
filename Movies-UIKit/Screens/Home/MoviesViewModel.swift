@@ -17,8 +17,7 @@ class MoviesViewModel {
     weak var delegate: MoviesViewModelDelegate?
     
     var moviesResult: [MovieViewData] = []
-    var filteredMovies: [MovieViewData] = []
-    var genreFilteredMovies: [MovieViewData] = []
+    var allMovies: [MovieViewData] = []
     var searchText: String = ""
     
     init(networkProvider: Networkable) {
@@ -42,7 +41,7 @@ class MoviesViewModel {
         self.coordinator?.presentMovieDetails(movie: movie)
     }
     
-    func checkFavorite(with id: Int) {
+    func handleFavoriteTapped(with id: Int) {
         let index = moviesResult.firstIndex(where: { $0.id == id })
         
         if let index { moviesResult[index].isFavorite = false }
@@ -61,6 +60,7 @@ class MoviesViewModel {
             }
         }
         
+        self.allMovies = self.moviesResult
         self.delegate?.didGetMovies()
     }
     
@@ -68,5 +68,10 @@ class MoviesViewModel {
         for i in 0..<moviesResult.count {
             moviesResult[i].isFavorite = false
         }
+    }
+    
+    func searchFilter(using searchText: String) {
+        self.moviesResult = allMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        self.delegate?.didGetMovies()
     }
 }

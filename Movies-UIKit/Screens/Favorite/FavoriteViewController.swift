@@ -45,7 +45,7 @@ public class FavoriteViewController: UIViewController {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.viewModel.getMovies(page: 1)
+        self.viewModel.getFavoriteMovies(page: 1)
     }
     
     //MARK: - Methods
@@ -107,7 +107,7 @@ extension FavoriteViewController: UICollectionViewDataSource, UICollectionViewDe
                 MovieDB.shared.favoritedIds.append(movie.id)
             }
             
-            viewModel.checkFavorite(with: movie.id)
+            viewModel.handleFavoriteTapped(with: movie.id)
         }
         
         return cell
@@ -125,18 +125,16 @@ extension FavoriteViewController: FavoriteViewModelDelegate {
 }
 
 extension FavoriteViewController: UITextFieldDelegate {
-    
     private func setupTextField() {
         contentView.textField.delegate = self
     }
     
     public func textFieldDidChangeSelection(_ textField: UITextField) {
         if let searchText = textField.text, !searchText.isEmpty {
-//            viewModel.filteredMovies = viewModel.moviesFavorite.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+            viewModel.searchFilter(using: searchText)
         } else {
-//            viewModel.filteredMovies = []
+            viewModel.getFavoriteMovies(page: 1)
         }
-        contentView.collectionView.reloadData()
     }
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {

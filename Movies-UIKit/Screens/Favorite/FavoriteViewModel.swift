@@ -17,11 +17,8 @@ class FavoriteViewModel: NSObject {
     weak var coordinator: AppCoordinating?
     weak var delegate: FavoriteViewModelDelegate?
     
-    var moviesResult: [MovieViewData] = [] {
-        didSet {
-            self.delegate?.didGetMovies()
-        }
-    }
+    var moviesResult: [MovieViewData] = []
+    var allFavoritedMovies: [MovieViewData] = []
     var searchText: String = ""
     
     init(networkProvider: Networkable){
@@ -29,7 +26,7 @@ class FavoriteViewModel: NSObject {
         super.init()
     }
     
-    func getMovies(page: Int) {
+    func getFavoriteMovies(page: Int) {
         Task { @MainActor in
             let result = await self.networkProvider.getMovies(page: page)
             switch result {
@@ -46,7 +43,7 @@ class FavoriteViewModel: NSObject {
         self.coordinator?.presentMovieDetails(movie: movie)
     }
     
-    func checkFavorite(with id: Int) {
+    func handleFavoriteTapped(with id: Int) {
         let index = moviesResult.firstIndex(where: { $0.id == id })
         
         if let index { moviesResult[index].isFavorite = false }
@@ -56,7 +53,7 @@ class FavoriteViewModel: NSObject {
     
     func checkFavorite() {
         for (i, movie) in moviesResult.enumerated() {
-            if let index = MovieDB.shared.favoritedIds.firstIndex(of: movie.id) {
+            if MovieDB.shared.favoritedIds.contains(movie.id) {
                 moviesResult[i].isFavorite = true
             } else {
                 moviesResult[i].isFavorite = false
@@ -64,5 +61,12 @@ class FavoriteViewModel: NSObject {
         }
         
         self.moviesResult = self.moviesResult.filter({ $0.isFavorite ?? true })
+        self.allFavoritedMovies = self.moviesResult
+        self.delegate?.didGetMovies()
+    }
+    
+    func searchFilter(using searchText: String) {
+        self.moviesResult = allFavoritedMovies.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        self.delegate?.didGetMovies()
     }
 }
