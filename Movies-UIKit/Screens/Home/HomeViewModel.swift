@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol MoviesViewModelDelegate: AnyObject {
+protocol HomeViewModelDelegate: AnyObject {
     func reloadData()
 }
 
-protocol MoviesViewModelType: AnyObject {
+protocol HomeViewModelType: AnyObject {
     var networkProvider: Networkable { get set }
-    var delegate: MoviesViewModelDelegate? { get set }
+    var delegate: HomeViewModelDelegate? { get set }
     var coordinator: AppCoordinating? { get set }
     var moviesResult: [MovieViewData] { get set }
     
@@ -25,9 +25,9 @@ protocol MoviesViewModelType: AnyObject {
     func presentMovieDetails(movie: MovieViewData)
 }
 
-final class MoviesViewModel: NSObject, MoviesViewModelType {
+final class HomeViewModel: NSObject, HomeViewModelType {
     weak var coordinator: AppCoordinating?
-    weak var delegate: MoviesViewModelDelegate?
+    weak var delegate: HomeViewModelDelegate?
     
     private var allMovies: [MovieViewData] = []
     

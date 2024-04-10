@@ -21,7 +21,7 @@ class NetworkManager: Networkable {
     var networkRequest = MoyaProvider<NetworkRequest>()
     
     func getMovies(page: Int) async -> Result<Movies, CustomError> {
-        await networkRequest.requestModel(.getMovies(page: 1), Movies.self)
+        await networkRequest.requestModel(.getMovies(page: page), Movies.self)
     }
     
     func getMovieDetails(id: Int) async -> Result<MovieDetails, CustomError> {

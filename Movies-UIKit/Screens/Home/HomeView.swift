@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MoviesView: UIView {
+class HomeView: UIView {
     
     //MARK: - Properties
     
@@ -87,7 +87,7 @@ class MoviesView: UIView {
 }
 
 //MARK: - ViewCode
-extension MoviesView: ViewCoded {
+extension HomeView: ViewCoded {
     func buildViewHierarchy() {
         addSubview(headerStackView)
         headerStackView.addArrangedSubview(titleAppLabel)

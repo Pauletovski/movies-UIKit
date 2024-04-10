@@ -102,7 +102,7 @@ final class FavoriteViewModel: NSObject, FavoriteViewModelType {
     }
     
     func removeGenreFilter() {
-        guard let genre = MovieDB.shared.genreSelected else { return }
+        guard MovieDB.shared.genreSelected != nil else { return }
         
         MovieDB.shared.genreSelected = nil
         getFavoriteMovies(page: 1)

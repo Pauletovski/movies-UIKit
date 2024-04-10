@@ -7,16 +7,16 @@
 
 import UIKit
 
-public class MoviesViewController: UIViewController {
+public class HomeViewController: UIViewController {
     
     //MARK: - Properties
-    private var viewModel: MoviesViewModelType
-    lazy private var contentView: MoviesView = {
-        MoviesView()
+    private var viewModel: HomeViewModelType
+    lazy private var contentView: HomeView = {
+        HomeView()
     }()
     
     //MARK: - Init
-    init(viewModel: MoviesViewModel) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         self.viewModel.delegate = self
@@ -65,7 +65,7 @@ public class MoviesViewController: UIViewController {
 
     //MARK: - CollectionViewConfiguration
 
-extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     private func setupCollectionView() {
         contentView.collectionView.register(MovieCard.self, forCellWithReuseIdentifier: MovieCard.identifier)
         contentView.collectionView.dataSource = self
@@ -107,7 +107,7 @@ extension MoviesViewController: UICollectionViewDataSource, UICollectionViewDele
     }
 }
 
-extension MoviesViewController: UITextFieldDelegate {
+extension HomeViewController: UITextFieldDelegate {
     private func setupTextField() {
         contentView.textField.delegate = self
     }
@@ -126,7 +126,7 @@ extension MoviesViewController: UITextFieldDelegate {
     }
 }
 
-extension MoviesViewController: MoviesViewModelDelegate {
+extension HomeViewController: HomeViewModelDelegate {
     func reloadData() {
         contentView.collectionView.reloadData()
     }

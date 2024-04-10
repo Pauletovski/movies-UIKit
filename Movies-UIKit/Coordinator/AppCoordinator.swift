@@ -69,9 +69,9 @@ extension AppCoordinator {
     private func makeViewController(for tabBarPage: TabBarPage) -> UIViewController {
         switch tabBarPage {
         case .movies:
-            let viewModel = MoviesViewModel(networkProvider: networkManager)
+            let viewModel = HomeViewModel(networkProvider: networkManager)
             viewModel.coordinator = self
-            let viewController = MoviesViewController(viewModel: viewModel)
+            let viewController = HomeViewController(viewModel: viewModel)
             viewController.tabBarItem = tabBarPage.tabBarItem
             return viewController
         case .favorite:
@@ -101,41 +101,5 @@ extension AppCoordinator {
     
     private func present(_ vc: UIViewController, _ animated: Bool = false) {
         self.navigationController.present(vc, animated: animated)
-    }
-}
-
-enum TabBarPage: Int, CaseIterable {
-    case movies = 0
-    case favorite = 1
-    
-    var title: String {
-        switch self {
-        case .movies:
-            "Movies"
-        case .favorite:
-            "Favorites"
-        }
-    }
-    
-    var image: UIImage? {
-        switch self {
-        case .movies:
-            return UIImage(systemName: "popcorn")
-        case .favorite:
-            return UIImage(systemName: "heart")
-        }
-    }
-
-    var selectedImage: UIImage? {
-        switch self {
-        case .movies:
-            return UIImage(systemName: "popcorn.fill")
-        case .favorite:
-            return UIImage(systemName: "heart.fill")
-        }
-    }
-    
-    var tabBarItem: UITabBarItem {
-        UITabBarItem(title: self.title, image: self.image, selectedImage: self.selectedImage)
     }
 }
